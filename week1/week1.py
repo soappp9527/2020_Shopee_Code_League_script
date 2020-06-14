@@ -7,10 +7,9 @@ shop = pd.DataFrame(data["shopid"].unique(), columns=["shopid"])
 #data["day"].unique()
 data["event_time"] = pd.to_datetime(data["event_time"])
 data_sort = data.set_index("event_time").sort_index()
-data_silde = data_sort.groupby(["shopid", "userid"]).rolling("H").count()#sliding window
+data_silde = data_sort.groupby(["shopid", "userid"])["orderid"].rolling("H").count().reset_index()#sliding window
 
-order_count = data_silde["orderid"].reset_index()
-order_count = order_count.loc[order_count["orderid"]>=3]#filter
+order_count = data_silde.loc[data_silde["orderid"]>=3]#filter
 
 deal_count = order_count.groupby(["shopid","userid"]).size().reset_index()
 deal_count["userid"] = deal_count["userid"].astype(str)
