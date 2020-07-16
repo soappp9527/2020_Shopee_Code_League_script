@@ -1,7 +1,7 @@
-
-
 # [2020 Shopee Code League](https://careers.shopee.sg/codeleague/?fbclid=IwAR0hnbAMRJdShIUVmL5LVhoy6OxXv6nE1jyW-Gn5_fpT9lOnIijorsbnVD8)
+
 ---
+
 ## Week 1: [Order Brushing](https://www.kaggle.com/c/order-brushing-shopee-code-league)
 
 ### Task
@@ -126,7 +126,60 @@ Translate product title in Traditional Chinese to English
 
 ### Task
 
-Identify all the orders that are considered late depending on the Service Level Agreements (SLA) with our Logistics Provider.
+Identify all the orders that are considered **late** depending on the **Service Level Agreements (SLA)**.
 
+1. 1st attempt = 1st_deliver_attempt - pick, judge to be late if > SLA
+2. 2nd attempt = 2nd_deliver_attempt - 1st_deliver_attempt, judge to be late if > 3 days regardless of origin to destination route
+3. If no 2nd_deliver_attempt means 1st_deliver_attempt successful
+4. All time formats are stored in epoch time based on Local Time (GMT+8)
+5. Only consider the date when determining if the order is late; ignore the time
+6. Only consider working days, excluding Sunday and public holidays (2020-03-08, 2020-03-25, 2020-03-30, 2020-03-31)
+7. Both attempts need to be on time 
 
+SLA matrix:
 
+|   from_to    |  Metro Manila  |     Luzon      |    Visayas     |    Mindanao    |
+| :----------: | :------------: | :------------: | :------------: | :------------: |
+| Metro Manila | 3 working days | 5 working days | 7 working days | 7 working days |
+|    Luzon     | 5 working days | 5 working days | 7 working days | 7 working days |
+|   Visayas    | 7 working days | 7 working days | 7 working days | 7 working days |
+|   Mindanao   | 7 working days | 7 working days | 7 working days | 7 working days |
+
+### Data format
+
+|  orderid   |    pick    | 1st_deliver_attempt | 2nd_deliver_attempt |                         buyeraddress                         |                        selleraddress                         |
+| :--------: | :--------: | :-----------------: | :-----------------: | :----------------------------------------------------------: | :----------------------------------------------------------: |
+| 2215676524 | 1583138397 |     1583384958      |                     | Baging ldl BUENAVISTA,PATAG.CAGAYAN Buagsong,cordova,cebu Mt.VERNON Buolding, Habagat Lordman NATL Metro Manila | Pantranco vill. 417 Warehouse# katipunan 532 (UNIT Metro Manila |
+| 2219624609 | 1583309968 |     1583463236      |     1583798576      | coloma's quzom CASANAS Site1 Masiyan 533A Stolberge 10,Baloy eastt away 041banahaw street,Tuguegarao agro, Metro Manila | BLDG 210A Moras C42B 2B16,168 church) Complex JUNKSHOP. 22-c Metro Manila |
+| 2220979489 | 1583306434 |     1583459779      |                     | 21-O LumangDaan,Capitangan,Abucay,Bataan .Bignay Office,Buhanginan saBrgy186, 34i (bayanihan MALARIA, Alindahaw, Rm401, st.ngry p.pasubas metro manila |     #66 150-C, DRIVE, Milagros Joe socorro Metro Manila      |
+| 2221066352 | 1583419016 |     1583556341      |                     | 616Espiritu MARTINVILLE,MANUYO #5paraiso kengi 12nn-9pm Brgy,Milagrosa 6Putohan,Tramo #18saint вєrnαвє st,CAA Metro Manila | 999maII 201,26 Villaruel Barretto gen.t number: 70-B 7A. MALL kanto- 1040 Metro Manila |
+| 2222478803 | 1583318305 |     1583480500      |                     | L042 Summerbreezee1 L2(Balanay analyn Lot760 Cluster3-2T seppina UPPERG/L luzon | G66MANILA Hiyas Fitness MAYSILO magdiwang Lt.4C lot6 2F-48 st.,Binondo 1188Mall2M01 carnation Mae Metro Manila |
+
+### Submission format
+
+| **orderid** | **is_late** |
+| :---------: | :---------: |
+| 1955512445  |      0      |
+| 1955598428  |      1      |
+
+is_late: assign value 1 if the order is late, otherwise 0
+
+### My strategy
+
+1. Split location from address
+2. Assign SLA by location
+3. GMT+8 and transfer to date time
+4. Working days count (np.busday_count)
+5. Late judgement 
+
+### Score
+
+0.63885
+
+Late Submission: 1.0
+
+### Post-match review
+
+1. Don't know how to count working days
+2. Forget GMT+8
+3. Need to use vectorization to speed up when deal with large dataset
