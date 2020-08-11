@@ -112,13 +112,9 @@ Translate product title in Traditional Chinese to English
 |                    nac nac活氧全效柔衣素                     |    Mother & Baby     |
 | \#Nike耐吉官方F.C. 男子足球長褲新款標準型 拒水 拉鏈褲腳\nCD0557 |    Men's Apparel     |
 
-### Submission format
-
 ### My strategy
 
-### Score
-
-### Post-match review
+NLP is not my area of interest, so I just skip it
 
 ---
 
@@ -181,5 +177,120 @@ Late Submission: 1.0
 ### Post-match review
 
 1. Don't know how to count working days
+
 2. Forget GMT+8
+
 3. Need to use vectorization to speed up when deal with large dataset
+
+---
+
+## Week6:[Sentiment Analysis (Data Science)](https://www.kaggle.com/c/shopee-sentiment-analysis)
+
+### Task
+
+Build a customer review rating model
+
+### Data format
+
+| **review_id** |                          **review**                          | **rating** |
+| :-----------: | :----------------------------------------------------------: | :--------: |
+|     11576     | It's working properly. Very quick heating capability. Good product with this price thanks |     5      |
+|     10293     | Excellent service by the staff, helpful and polite. Great experience overall. |     5      |
+|     01820     | The delivery was fast but the packaging was not that good, the price is reasonable, overall the product is ok., |     4      |
+|     32090     |                    Package not that well                     |     2      |
+
+### Submission format
+
+| review_id | rating |
+| :-------: | :----: |
+|   1156    |   1    |
+|   2654    |   0    |
+
+### My strategy
+
+NLP is not my area of interest, so I just submit a table with all rating are 5
+
+### Score
+
+0.40517
+
+---
+
+## Week 7:[Short Algorithm Contest #2](https://www.hackerearth.com/challenges/competitive/shopee-programming-contest-2/?utm_campaign=Shopee+Programming+Contest+#2&utm_medium=email&utm_source=reminder-email)
+
+### Task
+
+Solve algorithm problems
+
+### Score
+
+10 (done by [mp0530](https://github.com/mp0530))
+
+---
+
+## Week 8: [Marketing Analytics](https://www.kaggle.com/c/open-shopee-code-league-marketing-analytics)
+
+### Task
+
+Predict whether users will open the marketing emails
+
+### Data format
+
+**[train/test].csv**
+
+- `country_code`: An integer code for the country where the user lives.
+- `grass_date`: The date when the email was sent.
+- `user_id`: the unique identifier of each user
+- `subject_line_length`: the number of characters in the subject of the email
+- `last_open_day`: How many days ago was the last time the user opened an email
+- `last_login_day`: How many days ago the user last logged in its Shopee account
+- `last_checkout_day`: How many days ago the user last purchased on Shopee
+- `open_count_last_[10/30/60]_days`: the total number of email opens in the last N days.
+- `login_count_last_[10/30/60]_days`: the total number of user logins in the last N days.
+- `checkout_count_last_[10/30/60]_days`: the total number of checkouts (=purchases) by the user in the last N days.
+- `open_flag`: the target variable. Whether or not the email was opened.
+- `row_id`:
+
+**users.csv**
+[empty values are simply unknown]
+
+- `user_id`: the unique identifier of each user
+- `attr_[1/2/3]`: general user attributes. Attr_1 and attr_2 are boolean, attrib_3 is categorical (can be integer [0,1,2,3,4])
+- `age`: The user's reported age.
+- `domain`: The user's top-level email domain. Less common domains are bundled together under the label 'other'.
+
+### Submission format
+
+| row_id | open_flag |
+| :----: | :-------: |
+|   0    |     1     |
+|   1    |     1     |
+|   2    |     0     |
+|   3    |     0     |
+
+### My strategy
+
+1. EDA
+2. data preprocess (data type, time code, date)
+3. feature engineering (fill NA, remove outlier)
+4. model selection (random forest, GBM, XGBoost, LightGBM)
+5. grid search
+
+my notebook
+
+1. [EDA by R (data.table, ggplot2)](https://www.kaggle.com/soappp9527/marketing-analytics-eda-by-r-data-table-ggplot2)
+
+2. [simple gbm model by h2o](https://www.kaggle.com/soappp9527/simple-gbm-model-by-h2o)
+
+### Score
+
+0.53353 (NO. 26)
+
+### Post-match review
+
+1. train and test dataset are not similar, so it's hard to find the right direction to improve accuracy
+2. Lack of sensitivity for processing time series data, missing a lot of information
+3. don't get right way to deal with NA
+4. don't really understead the heperparameter in model, so can't grid search well
+5. That's the best score of all shopee league competition, good job!
+
